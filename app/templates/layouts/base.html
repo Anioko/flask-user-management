@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Flask User Management System</title>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/bootstrap.min.css') }}">
+    <!-- DataTables CSS -->
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/datatables/dataTables.bootstrap4.min.css') }}">
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/stylesheet.css') }}">
+</head>
+<body>
+    {% block content %} {% endblock %}
+
+    <script src="{{ url_for('static', filename='js/jquery-3.6.0.min.js') }}"></script>
+    <!-- DataTables JS -->
+    <script src="{{ url_for('static', filename='js/datatables/jquery.dataTables.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/datatables/dataTables.bootstrap4.min.js') }}"></script>
+
+    <script src="{{ url_for('static', filename='js/bootstrap.bundle.min.js') }}"></script>
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+</body>
+</html>
