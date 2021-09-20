@@ -25,24 +25,23 @@ def user_management():
 @login_required(role='admin')
 def create_account():
 	form = CreateAccountForm()
-	if request.method == 'POST':
-		if form.validate_on_submit():
-			name = request.form['name']
-			email = request.form['email']
-			password = request.form['password']
-			role = form.user_type.data
-			
-			hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-			user = User(name=name, email=email, password=hashed_password, role=role)
+	if request.method == 'POST' and form.validate():
+		name = request.form['name']
+		email = request.form['email']
+		password = request.form['password']
+		role = form.user_type.data
+		
+		hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+		user = User(name=name, email=email, password=hashed_password, role=role)
 
-			db.session.add(user)
-			db.session.commit()
+		db.session.add(user)
+		db.session.commit()
 
-			flash('Success! Account has been created.', 'success')
-			return redirect(url_for('admin.user_management'))
+		flash('Account has been created successfully!', 'success')
+		return redirect(url_for('admin.user_management'))
 	return render_template('admin/create_account.html', form=form)
 
-@admin_blueprint.route('/update-account/<int:id>', methods=['GET'])
+@admin_blueprint.route('/update-account/<int:id>')
 @login_required(role='admin')
 def update_account(id):
 	user = User.query.filter_by(id=id)
@@ -57,7 +56,7 @@ def update_name(id):
 
 		db.session.commit()
 
-		flash('Success! Account name has been updated.', 'success')
+		flash('Account name has been updated successfully!', 'success')
 		return redirect(url_for('admin.update_account', id=id))
 	return redirect(url_for('admin.user_management'))
 
@@ -65,19 +64,22 @@ def update_name(id):
 @login_required(role='admin')
 def change_password(id):
 	if request.method == 'POST':
-			user = User.query.get_or_404(id)
-			password = request.form['password']
-			confirm_password = request.form['confirm_password']
+		user = User.query.get_or_404(id)
+		password = request.form['password']
+		confirm_password = request.form['confirm_password']
 
-			if password != confirm_password:
-				flash('Failed! Password does NOT match, please try again!', 'danger')
-				return redirect(url_for('admin.update_account', id=id))
-			else:
-				user.password = bcrypt.generate_password_hash(password).decode('utf-8')
-				db.session.commit()
-
-			flash('Success! Password has been changed.', 'success')
+		if password != confirm_password:
+			flash('Password and confirm password do not match, please try again!', 'danger')
 			return redirect(url_for('admin.update_account', id=id))
+		elif len(password) < 6 or len(password) > 32:
+			flash('Password field must be between 6 and 32 characters long.', 'danger')
+			return redirect(url_for('admin.update_account', id=id))
+		else:
+			user.password = bcrypt.generate_password_hash(password).decode('utf-8')
+			db.session.commit()
+
+		flash('Password has been changed successfully!', 'success')
+		return redirect(url_for('admin.update_account', id=id))
 	return redirect(url_for('admin.user_management'))
 
 @admin_blueprint.route('/user-management/delete/<int:id>', methods=['GET', 'POST'])
@@ -89,6 +91,6 @@ def delete_user(id):
 		db.session.delete(user)
 		db.session.commit()
 
-		flash('Success! User has been deleted.', 'success')
+		flash('User has been deleted successfully!', 'success')
 		return redirect(url_for('admin.user_management'))
 	return redirect(url_for('admin.user_management'))

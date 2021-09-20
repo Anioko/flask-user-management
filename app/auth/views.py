@@ -21,20 +21,19 @@ def login():
 
 	form = LoginForm()
 
-	if request.method == 'POST':
-		if form.validate_on_submit():
-			email = request.form['email']
-			password = request.form['password']
-			user = User.query.filter_by(email=email).first()
+	if request.method == 'POST' and form.validate():
+		email = request.form['email']
+		password = request.form['password']
+		user = User.query.filter_by(email=email).first()
 
-			if user and bcrypt.check_password_hash(user.password, password) and user.role == 'admin':
-				login_user(user, remember=form.remember.data)
-				return redirect_dest(fallback=url_for('admin.dashboard'))
-			elif user and bcrypt.check_password_hash(user.password, password) and user.role == 'user':
-				login_user(user, remember=form.remember.data)
-				return redirect_dest(fallback=url_for('user.dashboard'))
-			else:
-				flash('Login failed! Your email or password is incorrect.', 'danger')
+		if user and bcrypt.check_password_hash(user.password, password) and user.role == 'admin':
+			login_user(user, remember=form.remember.data)
+			return redirect_dest(fallback=url_for('admin.dashboard'))
+		elif user and bcrypt.check_password_hash(user.password, password) and user.role == 'user':
+			login_user(user, remember=form.remember.data)
+			return redirect_dest(fallback=url_for('user.dashboard'))
+		else:
+			flash('Login failed! Your email or password is incorrect.', 'danger')
 	return render_template('auth/login.html', form=form)
 
 @auth_blueprint.route('/signup', methods=['GET', 'POST'])
@@ -47,21 +46,20 @@ def signup():
 		
 	form = SignupForm()
 
-	if request.method == 'POST':
-		if form.validate_on_submit():
-			name = request.form['name']
-			email = request.form['email']
-			password = request.form['password']
-			role = 'user'
-			
-			hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
-			user = User(name=name, email=email, password=hashed_password, role=role)
+	if request.method == 'POST' and form.validate():
+		name = request.form['name']
+		email = request.form['email']
+		password = request.form['password']
+		role = 'user'
+		
+		hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+		user = User(name=name, email=email, password=hashed_password, role=role)
 
-			db.session.add(user)
-			db.session.commit()
+		db.session.add(user)
+		db.session.commit()
 
-			flash('Success! Your account has been created.', 'success')
-			return redirect(url_for('auth.login'))
+		flash('Success! Your account has been created.', 'success')
+		return redirect(url_for('auth.login'))
 	return render_template('auth/signup.html', form=form)
 
 @auth_blueprint.route('/logout')
