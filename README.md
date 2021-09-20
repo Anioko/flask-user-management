@@ -39,7 +39,7 @@
 
 ## About The Project
 
-A simple Flask boilerplate for user management with SQLAlchemy, user authentication, and role-based authorization. This code base serves as a starting point for writing your next Flask application.
+A simple Flask boilerplate for user management with SQLAlchemy, user authentication, and role-based authorization. If you plan to create a Flask application with user management, user authentication, and role-based authorization, this code base can serve as your starting point.
 
 What's included?
 * Blueprints
@@ -47,7 +47,7 @@ What's included?
 * Flask-SQLAlchemy for databases
 * Flask-WTF for forms
 
-If you have other resources you want to create in this application, you can make a separate folder for each one of those within the `app directory`.
+If you have other resources you want to create in this application, you can make a separate folder for each one of those within the `app` directory.
 
 ### Built With
 * [Python](https://www.python.org)
@@ -101,10 +101,17 @@ flask run
 
 ## Screenshots
 
-![Login](screenshots/login.png)
-![Sign up](screenshots/signup.png)
-![User Management](screenshots/admin-user-management.png)
-![Update Account](screenshots/admin-update-account.png)
+Login
+![Login](screenshots/login.gif)
+
+Sign up
+![Sign up](screenshots/signup.gif)
+
+Admin Create Account
+![Admin Create Account](screenshots/admin-create-account.gif)
+
+Admin Update Account
+![Admin Update Account](screenshots/admin-update-account.gif)
 
 ## License
 
