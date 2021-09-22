@@ -3,15 +3,17 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_login import LoginManager
 from flask_migrate import Migrate
 from flask_bcrypt import Bcrypt
+from flask_mail import Mail
 
 app = Flask(__name__)
 # Configuration
-app.config.from_pyfile('../config.cfg')
+app.config.from_pyfile('../config.py')
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
 migrate = Migrate(app, db)
 bcrypt = Bcrypt(app)
+mail = Mail(app)
 
 from app.auth.views import auth_blueprint
 from app.admin.views import admin_blueprint

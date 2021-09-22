@@ -1,6 +1,8 @@
 from flask import Blueprint, render_template, redirect, request, url_for, flash
 from flask_login import login_user, logout_user, current_user
-from app.auth.forms import LoginForm, SignupForm
+from app.auth.forms import (LoginForm, SignupForm,
+							RequestResetForm, ResetPasswordForm)
+from app.reset_password import send_reset_email
 from app.url_endpoint import redirect_dest
 from app.models import User
 from app import db, bcrypt
@@ -66,3 +68,49 @@ def signup():
 def logout():
 	logout_user()
 	return redirect(url_for('auth.login'))
+
+@auth_blueprint.route('/reset-password', methods=['GET', 'POST'])
+def reset_request():
+	# If user is already authenticated redirect to designated page
+	if current_user.is_authenticated and current_user.role == 'admin':
+		return redirect_dest(fallback=url_for('admin.dashboard'))
+	elif current_user.is_authenticated and current_user.role == 'user':
+		return redirect_dest(fallback=url_for('user.dashboard'))
+
+	form = RequestResetForm()
+
+	if request.method == 'POST' and form.validate():
+		email = request.form['email']
+		user = User.query.filter_by(email=email).first()
+		send_reset_email(user)
+		flash('A message has been sent to your email with instructions to reset your password.', 'info')
+		return redirect(url_for('auth.login'))
+	return render_template('auth/request_reset.html', form=form)
+
+@auth_blueprint.route('/reset-password/<token>', methods=['GET', 'POST'])
+def reset_token(token):
+	# If user is already authenticated redirect to designated page
+	if current_user.is_authenticated and current_user.role == 'admin':
+		return redirect_dest(fallback=url_for('admin.dashboard'))
+	elif current_user.is_authenticated and current_user.role == 'user':
+		return redirect_dest(fallback=url_for('user.dashboard'))
+
+	user = User.verify_reset_token(token)
+
+	if user is None:
+		flash('Invalid or expired token, please try again!', 'warning')
+		return redirect(url_for('auth.reset_request'))
+
+	form = ResetPasswordForm()
+
+	if request.method == 'POST' and form.validate():
+		password = request.form['password']
+
+		hashed_password = bcrypt.generate_password_hash(password).decode('utf-8')
+		user.password = hashed_password
+
+		db.session.commit()
+
+		flash('Success! Your password has been updated.', 'success')
+		return redirect(url_for('auth.login'))
+	return render_template('auth/request_token.html', form=form)

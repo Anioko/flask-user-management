@@ -10,8 +10,10 @@
 
             <div class="col-md-8">
                 <div class="card">
-                    <div class="card-header">Login Your Account</div>
+                    <div class="card-header">Password Reset</div>
                     <div class="card-body">
+
+                        <p>Please enter your email address and we will send a password reset link to your email.</p>
 
                         {% with messages = get_flashed_messages(with_categories=True) %}
                             {% if messages %}
@@ -26,7 +28,7 @@
                             {% endif %}
                         {% endwith %}
 
-                        <form action="{{ url_for('auth.login', next=request.args.get('next')) }}" method="POST">
+                        <form action="{{ url_for('auth.reset_request') }}" method="POST">
                             {{ form.csrf_token }}
                             <div class="form-group row">
                                 <label for="email" class="col-md-4 col-form-label text-md-right">Email</label>
@@ -40,31 +42,8 @@
                                 </div>
                             </div>
 
-                            <div class="form-group row">
-                                <label for="password" class="col-md-4 col-form-label text-md-right">Password</label>
-                                <div class="col-md-6">
-                                    <input type="password" id="password" class="form-control" name="password" value="{{ request.form.password }}" required>
-                                    {% if form.password.errors %}
-                                        {% for error in form.password.errors %}
-                                            <span class="text-danger">{{ error }}</span>
-                                        {% endfor %}
-                                    {% endif %}
-                                </div>
-                            </div>
-
-                            <div class="form-group row">
-                                <div class="col-md-6 offset-md-4">
-                                    <div class="checkbox">
-                                        <label>
-                                            {{ form.remember }} Remember me
-                                        </label>
-                                    </div>
-                                </div>
-                            </div>
-
                             <div class="col-md-6 offset-md-4">
-                                <button type="submit" class="btn btn-primary">Login</button>
-                                <a href="{{ url_for('auth.reset_request') }}" class="btn btn-link">Forgot password?</a>
+                                <button type="submit" class="btn btn-primary">Request Password Reset</button>
                             </div>
                         </form>
                     </div>
