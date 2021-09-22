@@ -64,37 +64,48 @@ All the dependencies and required libraries are included in the file `requiremen
 
 ### Installation
 
-1. Git clone or download the project files:
+Git clone or download the project files:
 ```
 git clone https://github.com/hazzillrodriguez/travel-pass.git
 ```
 
-2. Create and activate the virtual environment then install requirements:
+Create and activate the virtual environment then install requirements:
 ```
 python -m venv env
 source env/Scripts/activate
 pip install -r requirements.txt
 ```
 
-3. Set the environment variables:
+Set the environment variables:
 ```
 export FLASK_APP=run.py
 export FLASK_ENV=development
 ```
 
-4. Run migrations:
+Run migrations:
 ```
 flask db init
 flask db migrate
 flask db upgrade
 ```
 
-5. Modify the `create_admin.py` file with your email and password then run:
+Modify the `create_admin.py` file with your email and password then run:
 ```
 python create_admin.py
 ```
 
-6. Start the server:
+### Update Configuration Settings
+
+Before you can use this application, you will have to configure your Gmail account and password that will be used to send emails.
+
+Instead of editing `config.py` and checking in sensitive information into the code repository, these settings can be set using OS environment variables in your `.bashrc` or `.bash_profile` shell configuration file.
+```
+export EMAIL_USER = 'you_email@example.com'
+export EMAIL_PASS = 'your_password'
+```
+If you are using a Google SMTP server, you must enable ***Less secure app access*** on your account.
+
+Start the development web server:
 ```
 flask run
 ```
