@@ -46,10 +46,12 @@ What's included?
 * User authentication and role-based authorization
 * Flask-SQLAlchemy for databases
 * Flask-WTF for forms
+* Flask-Mail for sending emails
 
 If you have other resources you want to create in this application, you can make a separate folder for each one of those within the `app` directory.
 
 ### Built With
+
 * [Python](https://www.python.org)
 * [Flask](https://flask.palletsprojects.com/en/2.0.x/)
 * [SQLAlchemy](https://www.sqlalchemy.org/)
@@ -64,48 +66,46 @@ All the dependencies and required libraries are included in the file `requiremen
 
 ### Installation
 
-Git clone or download the project files:
+1. Git clone or download the project files:
 ```
 git clone https://github.com/hazzillrodriguez/travel-pass.git
 ```
 
-Create and activate the virtual environment then install requirements:
+2. Create and activate the virtual environment then install requirements:
 ```
 python -m venv env
 source env/Scripts/activate
 pip install -r requirements.txt
 ```
 
-Set the environment variables:
+3. Set the environment variables:
 ```
 export FLASK_APP=run.py
 export FLASK_ENV=development
 ```
 
-Run migrations:
+4. Run migrations:
 ```
 flask db init
 flask db migrate
 flask db upgrade
 ```
 
-Modify the `create_admin.py` file with your email and password then run:
+5. Modify the `create_admin.py` file with your email and password then run:
 ```
 python create_admin.py
 ```
 
 ### Update Configuration Settings
 
-Before you can use this application, you will have to configure your Gmail account and password that will be used to send emails.
-
-Instead of editing `config.py` and checking in sensitive information into the code repository, these settings can be set using OS environment variables in your `.bashrc` or `.bash_profile` shell configuration file.
+6. Before you can use this application, you will have to configure your Gmail account and password that will be used to send emails. Instead of editing `config.py` and checking in sensitive information into the code repository, these settings can be set using OS environment variables in your `.bashrc` or `.bash_profile` shell configuration file.
 ```
-export EMAIL_USER = 'you_email@example.com'
+export EMAIL_USER = 'your_email@example.com'
 export EMAIL_PASS = 'your_password'
 ```
-If you are using a Google SMTP server, you must enable ***Less secure app access*** on your account.
+Note: If you are using a Google SMTP server, you must enable ***Less secure app access*** on your account.
 
-Start the development web server:
+7. Start the development web server:
 ```
 flask run
 ```
