@@ -7,7 +7,7 @@ from flask_mail import Mail
 
 app = Flask(__name__)
 # Configuration
-app.config.from_pyfile('../config.py')
+app.config.from_object('config.DevelopmentConfig')
 
 db = SQLAlchemy(app)
 login_manager = LoginManager(app)
